@@ -1,19 +1,19 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import "bootstrap/dist/css/bootstrap.css";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const AddCompany = () => {
   var Navigate = useNavigate();
+  
   const validationSchema = Yup.object().shape({
     companyName: Yup.string()
       .min(5, "Too short.")
       .max(50, "Too long.")
       .required("companyName is required."),
-      companyDescription: Yup.string()
+    companyDescription: Yup.string()
       .min(2, "Too short.")
       .max(10, "Too long.")
       .required("companyDescriptio is required."),
@@ -29,15 +29,15 @@ const AddCompany = () => {
 
   const initialValues = {
     companyName: "",
-    companyDescription:"",
+    companyDescription: "",
     email: "",
     password: "",
     role: "user",
   };
   const handleSubmit = async (values) => {
     try {
-      await axios.post('http://localhost:4000/api/company',values)
-console.log(values)
+      await axios.post('http://localhost:4000/api/company', values)
+      console.log(values)
       Navigate("/admin/listCompanys");
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ console.log(values)
           >
             {({ resetForm }) => (
               <Form>
-                       <div className="form-group mb-3">
+                <div className="form-group mb-3">
                   <label htmlFor="companyName">CompanyName:</label>
                   <Field
                     type="text"
@@ -118,15 +118,15 @@ console.log(values)
 
                 <div id="my-radio-group">Role</div>
                 <div role="group" >
-                  <label> <Field type="radio"  name="role" value="user" />  User</label>
-                  <label> <Field type="radio"  name="role" value="admin" />  Admin </label>
+                  <label> <Field type="radio" name="role" value="user" />  User</label>
+                  <label> <Field type="radio" name="role" value="admin" />  Admin </label>
                 </div>
 
                 <div className="d-grid gap-2">
                   <button type="submit" className="btn btn-primary">
                     <i className='fa fa-save'></i> Save
                   </button>
-                  <Link className="btn btn-link" to="/companys">
+                  <Link className="btn btn-link" to="/admin/companys">
                     Back
                   </Link>
                 </div>

@@ -55,11 +55,23 @@ const _nav = [
     ],
   },
   {
-    component: CNavItem,
-    name: 'Tags',
-    to: '/admin/addTags',
+    component: CNavGroup,
+    name: 'Tag',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-
+    items: [
+      {
+        component: CNavItem,
+        name: 'add New Tag',
+        to: '/admin/addTags',
+        icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'List Of Tag',
+        to: '/admin/listTag', 
+        icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+      },
+    ],
   },
 ]
 

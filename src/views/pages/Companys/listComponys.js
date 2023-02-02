@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -8,8 +7,8 @@ const ListCompany = () => {
   const [companys, setCompanys] = useState([]);
   const handleCompanyList = async () => {
     try {
-      const compnaylist = await axios.get('http://localhost:4000/api/company')
-      setCompanys(compnaylist.data)
+      const companylist = await axios.get('http://localhost:4000/api/company')
+      setCompanys(companylist.data)
     } catch (error) {
       console.log(error)
     }
@@ -22,7 +21,7 @@ const ListCompany = () => {
     handleCompanyList();
   };
 
-   const deleteOneComapany = async (e, id) => {
+   const deleteOneCompany = async (e, id) => {
     try {
       await axios.delete(`http://localhost:4000/api/company/${id}`)
       handleCompanyList();
@@ -65,9 +64,9 @@ const ListCompany = () => {
                     <td>{company.companyDescription}</td>
                     <td>{company.email}</td>
                     <td> 
-                      <button className='btn btn-danger me-1' onClick={(e) => { deleteOneComapany(e, company._id) }}>
+                      <button className='btn btn-danger me-1' onClick={(e) => { deleteOneCompany(e, company._id) }}>
                         <i className='fa fa-trash'></i> Delete</button>
-                      <Link to={`/admin/company/update/${company._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
+                      <Link to={`/admin/company/${company._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
                     </td>
                   </tr>
                 </tbody>

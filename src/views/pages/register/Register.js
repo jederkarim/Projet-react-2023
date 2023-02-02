@@ -20,8 +20,8 @@ const Register = () => {
 
 
     const handleSubmit = async (values) => {
-      try {
-        await axios.post(' http://localhost:3001/companys', values)
+      try { 
+        await axios.post('http://localhost:4000/api/users', values)
         toast.success("add in successfully.");
         Navigate("/login");
       } catch (error) {

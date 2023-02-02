@@ -28,9 +28,9 @@ const Login = () => {
   };
   const handleSubmit = async (values) => {
     try {
-      await axios.post(' http://localhost:3001/companys', values)
+      await axios.post('http://localhost:4000/api/companys', values)
       toast.success("You're logged in successfully.");
-      Navigate("/dashboard");
+      Navigate("/admin/dashboard");
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);

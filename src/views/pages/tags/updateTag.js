@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
-const AddTags = () => {
-    var Navigate = useNavigate();
+
+function UpdateTag() {
+
+    const params = useParams()
+    let navigate = useNavigate();
+    const [tag, setTag] = useState({
+        name: "",
+        description: "",
+    });
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .min(5, "Too short.")
@@ -18,19 +25,32 @@ const AddTags = () => {
             .required("Description is required. "),
     });
 
-    const initialValues = {
-        name: "",
-        description: "",
-    };
-    const handleSubmit = async (values) => {
-
-      try {
-            await axios.post('http://localhost:4000/api/tags', values)
-            Navigate("/admin/listTag");
+    const handleUpdateTag = async (event, id) => {
+        try {
+            event.preventDefault()
+            await axios.put('http://localhost:4000/api/tags' + params.idTag, tag)
+            navigate("/listtag");
         } catch (error) {
             console.log(error);
+
         }
     };
+    const handleChange = (e) => {
+        const id = e.target.id
+        const value = e.target.value
+        setTag({ ...tag, [id]: value })
+    }
+
+    useEffect(() => {
+        const getTag = async () => {
+            const TagfromServer = await axios.get('http://localhost:4000/api/tags' + params.idTag)
+            setTag(TagfromServer.data);
+        };
+        getTag();
+    }, [params]);
+
+
+
 
     return (
         <div className="container">
@@ -38,9 +58,8 @@ const AddTags = () => {
                 <div className="col-md-6 offset-md-3 pt-3">
                     <h1 className="text-center">Add new Tag</h1>
                     <Formik
-                        initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={(values) => handleSubmit(values)}
+                        onSubmit={handleUpdateTag}
                     >
                         {({ resetForm }) => (
                             <Form>
@@ -48,7 +67,9 @@ const AddTags = () => {
                                     <label htmlFor="name">Tag name:</label>
                                     <Field
                                         type="text"
-                                        name="name"
+                                        id="name"
+                                        value={tag.name}
+                                        onChange={handleChange}
                                         className="form-control"
                                         placeholder="Enter your tag name here"
 
@@ -63,8 +84,9 @@ const AddTags = () => {
                                 <div className="form-group mb-3">
                                     <label htmlFor="description">Tag description:</label>
                                     <Field
-
-                                        name="description"
+                                        id="description"
+                                        value={tag.description}
+                                        onChange={handleChange}
                                         className="form-control"
                                         placeholder="Enter your tag description here"
 
@@ -93,6 +115,4 @@ const AddTags = () => {
         </div>
     );
 };
-
-export default AddTags
-
+export default UpdateTag;

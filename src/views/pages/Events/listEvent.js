@@ -8,7 +8,7 @@ const ListEvent = () => {
   const [events, setEvents] = useState([]);
   const handleEventList = async () => {
     try {
-      const eventList = await axios.get('http://localhost:4000/api/event')
+      const eventList = await axios.get('http://localhost:4000/api/events')
       setEvents(eventList.data)
     } catch (error) {
       console.log(error)
@@ -24,7 +24,7 @@ const ListEvent = () => {
 
    const deleteOneEvent = async (e, id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/event/${id}`)
+      await axios.delete(`http://localhost:4000/api/events/${id}`)
       handleEventList();
       refreshList();
     }
@@ -44,7 +44,7 @@ const ListEvent = () => {
               <Link to="/admin/addevent">
                 <button className="btn btn-success" type="button">
                   <i className='fa fa-plus'></i> Add new event</button>
-              </Link>
+              </Link> 
             </div>
             <table className="table">
               <thead className="thead-dark">
@@ -75,7 +75,7 @@ const ListEvent = () => {
                       <td> 
                         <button className='btn btn-danger me-1' onClick={(e) => { deleteOneEvent(e,event._id) }}>
                           <i className='fa fa-trash'></i> Delete</button>
-                        <Link to={`/admin/event/update/${event._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
+                        <Link to={`/admin/UpdateEvent/${event._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
                       </td>
                     </tr>
                   </tbody>

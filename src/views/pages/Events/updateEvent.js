@@ -1,15 +1,23 @@
-import React, {useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Link } from 'react-router-dom'
-// import AsyncSelect from 'react-select';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
-
-function AddEvent() {
-    var Navigate = useNavigate();
-
+function UpdateEvent() {
+    const params = useParams()
+    let navigate = useNavigate();
+    const [event, setEvent] = useState({
+        eventName: "",
+        eventDescription: "",
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
+        price: "",
+        location: "",
+    });
     const validationSchema = Yup.object().shape({
         eventName: Yup.string()
             .required("Event name is required."),
@@ -29,34 +37,29 @@ function AddEvent() {
             .required("Location is required."),
     });
 
-
-    const [setSelectedFile] = useState(null)
-    const handelPicChange = (e) => {
-        if (e.target.files.length > 0) {
-            const selectedFile = e.target.files[0]
-            setSelectedFile(selectedFile)
-        }
-    }
-    
-    const initialValues = {
-        eventName: "",
-        eventDescription: "",
-        startDate: "",
-        endDate: "",
-        startTime: "",
-        endTime: "",
-        price: "",
-        location: "",
-    };
-
-    const handleSubmit = async (values) => {
+    const handleUpdateEvent = async (event, id) => {
         try {
-            await axios.post('http://localhost:4000/api/events', values)
-            Navigate("/events");
+            event.preventDefault()
+            await axios.put('http://localhost:4000/api/events' + params.idEvent, event)
+            navigate("/admin/listEvent");
         } catch (error) {
             console.log(error);
+
         }
     };
+    const handleChange = (e) => {
+        const id = e.target.id
+        const value = e.target.value
+        setEvent({ ...event, [id]: value })
+    }
+
+    useEffect(() => {
+        const getEvent = async () => {
+            const EventfromServer = await axios.get('http://localhost:4000/api/events' + params.idEvent)
+            setEvent(EventfromServer.data);
+        };
+        getEvent();
+    }, [params]);
 
     return (
         <div className="container">
@@ -64,9 +67,8 @@ function AddEvent() {
                 <div className="col-md-6 offset-md-3 pt-3">
                     <h1 className="text-center">Add new event</h1>
                     <Formik
-                        initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={(values) => handleSubmit(values)}
+                        onSubmit={(values) => handleUpdateEvent(values)}
                     >
                         <Form>
                             <div className="form-group mb-3">
@@ -76,6 +78,8 @@ function AddEvent() {
                                     type="text"
                                     id="eventName"
                                     name="eventName"
+                                    value={event.eventName}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event name here"
                                 />
@@ -90,8 +94,9 @@ function AddEvent() {
                                 <label htmlFor="eventDescription">Event discription:</label>
                                 <Field
                                     type="text"
-                                    id="eventDescription"
                                     name="eventDescription"
+                                    value={event.eventDescription}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event description here"
                                 />
@@ -107,6 +112,8 @@ function AddEvent() {
                                 <Field
                                     type="date"
                                     name="startDate"
+                                    value={event.startDate}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event start date here"
                                 />
@@ -122,10 +129,12 @@ function AddEvent() {
                                 <Field
                                     type="date"
                                     name="endDate"
+                                    value={event.endDate}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event end date here"
                                 />
-            
+
                                 <ErrorMessage
                                     name="endDate"
                                     component="small"
@@ -138,6 +147,8 @@ function AddEvent() {
                                 <Field
                                     type="time"
                                     name="startTime"
+                                    value={event.startTime}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event start time here"
                                 />
@@ -153,6 +164,8 @@ function AddEvent() {
                                 <Field
                                     type="time"
                                     name="endTime"
+                                    value={event.endTime}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event end time here"
                                 />
@@ -169,6 +182,8 @@ function AddEvent() {
                                     type="currency"
                                     currency="TND"
                                     name="price"
+                                    value={event.price}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your price here"
                                 />
@@ -183,8 +198,9 @@ function AddEvent() {
                                 <label htmlFor="location">Location:</label>
                                 <Field
                                     type="text"
-                                    id="location"
                                     name="location"
+                                    value={event.location}
+                                    onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your event location here"
                                 />
@@ -200,8 +216,10 @@ function AddEvent() {
                                 <input type={"file"}
                                     id="picture"
                                     name="picture"
+                                    value={event.picture}
                                     className="form-control"
-                                    onChange={(e) => handelPicChange(e)} />
+                                    // onChange={(e) => handelPicChange(e)} />
+                                    />
                                 <ErrorMessage
                                     name="location"
                                     component="small"
@@ -225,4 +243,4 @@ function AddEvent() {
     );
 };
 
-export default AddEvent;
+export default UpdateEvent;
