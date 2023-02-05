@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -9,13 +9,35 @@ import axios from 'axios';
 function UpdateCompany() {
     const navigate = useNavigate()
     const params = useParams()
-    const  [company, setCompany] = useState({
-        companyName: "",
-        companyDescription: "",
-        email: "",
-        password: "",
-        role: "",
+    const [company, setCompany] = useState({
+        
+            companyName: "",
+            companyDescription: "",
+            email: "",
+            password: "",
+            role: "",
+        
     });
+
+    const validationSchema = Yup.object().shape({
+        companyName: Yup.string()
+            .min(5, "Too short.")
+            .max(50, "Too long.")
+            .required("companyName is required."),
+        companyDescription: Yup.string()
+            .min(2, "Too short.")
+            .max(10, "Too long.")
+            .required("companyDescriptio is required."),
+        email: Yup.string()
+            .email("Invalid email.")
+            .required("Email is required."),
+        password: Yup.string()
+            .required("Password is required.")
+            .min(8, "Too short.")
+            .max(50, "Too long."),
+        role: Yup.string().required('Add a role.')
+    });
+
     const handleUpdateCompany = async (event, id) => {
         event.preventDefault()
         await axios.put('http://localhost:4000/api/company' + params.idCompany, company)
@@ -40,9 +62,9 @@ function UpdateCompany() {
                 <div className="col-md-6 offset-md-3 pt-3">
                     <h1 className="text-center">Update Company</h1>
                     <Formik
-                        initialValues={initialValues}
+                         initialValues={{companyName: "",companyDescription: "", email: "", password: "", role: ""}}
                         validationSchema={validationSchema}
-                        onSubmit={(values) =>  handleUpdateCompany (values)}
+                        onSubmit={(values) => handleUpdateCompany(values)}
                     >
 
                         <Form>
