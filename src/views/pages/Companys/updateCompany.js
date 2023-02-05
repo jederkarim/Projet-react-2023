@@ -1,107 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
 
 function UpdateCompany() {
-
-    const { id } = useParams();
-    let navigate = useNavigate();
-    const initialValues = {
+    const navigate = useNavigate()
+    const params = useParams()
+    const  [company, setCompany] = useState({
         companyName: "",
         companyDescription: "",
         email: "",
         password: "",
         role: "",
-    };
-    const validationSchema = Yup.object().shape({
-        companyName: Yup.string()
-            .min(5, "Too short.")
-            .max(50, "Too long.")
-            .required("companyName is required."),
-        companyDescription: Yup.string()
-            .min(2, "Too short.")
-            .max(10, "Too long.")
-            .required("companyDescriptio is required."),
-        email: Yup.string()
-            .email("Invalid email.")
-            .required("Email is required."),
-        role: Yup.string().required('Add a role.')
     });
-
-    const [company, setCompany] = useState(initialValues);
-
-    const getCompany = id => {
-        axios.getOne(id)
-            .then(response => {
-                const fields = ['companyName', 'companyDescription', 'email', 'role'];
-                fields.forEach(field => initialValues[field] = response.data[field]);
-
-                setCompany(response.data);
-
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
+    const handleUpdateCompany = async (event, id) => {
+        event.preventDefault()
+        await axios.put('http://localhost:4000/api/company' + params.idCompany, company)
+        navigate('/admin/listCompany')
+    }
+    const handleChange = (e) => {
+        const id = e.target.id
+        const value = e.target.value
+        setCompany({ ...company, [id]: value })
+    }
     useEffect(() => {
-        if (id)
-            getCompany(id);
-    }, [id]);
-
-    const handleSubmit = (values) => {
-
-        const data = {
-            companyName: values.companyName,
-            companyDescription: values.companyDescription,
-            email: values.email,
-            role: values.role,
-
+        const getCompany = async () => {
+            const companyfromServer = await axios.get('http://localhost:4000/api/company' + params.idCompany)
+            setCompany(companyfromServer.data);
         };
-
-        axios.updateOne(id, data).then(response => {
-            // toast.success(response.data.message);
-            navigate("/ListCompany");
-
-
-
-        }).catch(error => {
-            console.log(error);
-            // toast.error(error.response.data.message);
-
-        })
-
-    };
-    // const handleUpdateCompany = async (event, id) => {
-    //     try {
-    //         event.preventDefault()
-    //         await axios.put('http://localhost:4000/api/company' + params.idCompany, company)
-    //         navigate("/ListCompany");
-    //     } catch (error) {
-    //         console.log(error);
-
-    //     }
-    // };
-    // const handleChange = (e) => {
-    //     const id = e.target.id
-    //     const value = e.target.value
-    //     setCompany({ ...company, [id]: value })
-    // }
-
-    // useEffect(() => {
-    //     const getCompany = async () => {
-    //         const CompanyfromServer = await axios.get('http://localhost:4000/api/company' + params.idCompany)
-    //         setCompany(CompanyfromServer.data);
-    //     };
-    //     getCompany();
-    // }, [params]);
-
-
-
+        getCompany();
+    }, [params]);
 
     return (
         <div className="container">
@@ -111,16 +42,16 @@ function UpdateCompany() {
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={(values) => handleSubmit(values)}
+                        onSubmit={(values) =>  handleUpdateCompany (values)}
                     >
 
                         <Form>
                             <div className="form-group mb-3">
                                 <label htmlFor="companyName">company Name:</label>
                                 <Field
-
                                     type="text"
                                     id="companyName"
+                                    value={company.companyName} onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your company Name here"
                                 />
@@ -136,7 +67,7 @@ function UpdateCompany() {
 
                                     type="text"
                                     id="companyDescription"
-
+                                    value={company.companyDescription} onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter Description of company here"
 
@@ -154,10 +85,9 @@ function UpdateCompany() {
                                     type="email"
                                     id="email"
                                     name="email"
-
+                                    value={company.email} onChange={handleChange}
                                     className="form-control"
                                     placeholder="Enter your email here"
-
                                 />
                                 <ErrorMessage
                                     name="email"
