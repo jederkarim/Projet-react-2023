@@ -63,10 +63,12 @@ const ListCompany = () => {
                     <td>{company.companyName}</td>
                     <td>{company.companyDescription}</td>
                     <td>{company.email}</td>
-                    <td> 
+                    <td>
+                       
                       <button className='btn btn-danger me-1' onClick={(e) => { deleteOneCompany(e, company._id) }}>
                         <i className='fa fa-trash'></i> Delete</button>
-                      <Link to={`/admin/company/${company._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
+                      <Link to={`/admin/UpdateCompany/${company._id}`} className='btn btn-success'>
+                        <i className='fa fa-edit'></i> Update</Link>
                     </td>
                   </tr>
                 </tbody>

@@ -62,9 +62,10 @@ function UpdateCompany() {
                 <div className="col-md-6 offset-md-3 pt-3">
                     <h1 className="text-center">Update Company</h1>
                     <Formik
-                         initialValues={{companyName: "",companyDescription: "", email: "", password: "", role: ""}}
+                    initialValues= {company || {companyName: "",companyDescription: "", email: "", password: "", role: ""}}
                         validationSchema={validationSchema}
                         onSubmit={(values) => handleUpdateCompany(values)}
+                        enableReinitialize
                     >
 
                         <Form>
@@ -137,7 +138,7 @@ function UpdateCompany() {
                                 </label>
                             </div>
                             <div className="d-grid gap-2">
-                                <button type="submit" /*value="update"*/ className="btn btn-primary" to="/admin/UpdateCompany">
+                                <button type="submit" value="update" className="btn btn-primary" to="/admin/UpdateCompany">
                                     <i className='fa fa-save'></i> Update
                                 </button>
                                 <Link className="btn btn-link" to="/companys">
