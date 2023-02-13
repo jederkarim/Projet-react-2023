@@ -7,16 +7,13 @@ import axios from 'axios';
 
 
 function UpdateCompany() {
-    const navigate = useNavigate()
     const params = useParams()
+    const navigate = useNavigate()
     const [company, setCompany] = useState({
-        
-            companyName: "",
-            companyDescription: "",
-            email: "",
-            password: "",
-            role: "",
-        
+        companyName: "",
+        companyDescription: "",
+        email: "",
+        role: "",
     });
 
     const validationSchema = Yup.object().shape({
@@ -38,10 +35,9 @@ function UpdateCompany() {
         role: Yup.string().required('Add a role.')
     });
 
-    const handleUpdateCompany = async (event, id) => {
-        event.preventDefault()
-        await axios.put('http://localhost:4000/api/company' + params.idCompany, company)
-        navigate('/admin/listCompany')
+    const handleUpdateCompany = async (event) => {
+        await axios.put('http://localhost:4000/api/company/' + params.id, company)
+        navigate('/admin/listCompanys')
     }
     const handleChange = (e) => {
         const id = e.target.id
@@ -50,7 +46,7 @@ function UpdateCompany() {
     }
     useEffect(() => {
         const getCompany = async () => {
-            const companyfromServer = await axios.get('http://localhost:4000/api/company' + params.idCompany)
+            const companyfromServer = await axios.get('http://localhost:4000/api/company/' + params.id)
             setCompany(companyfromServer.data);
         };
         getCompany();
@@ -62,90 +58,94 @@ function UpdateCompany() {
                 <div className="col-md-6 offset-md-3 pt-3">
                     <h1 className="text-center">Update Company</h1>
                     <Formik
-                    initialValues= {company || {companyName: "",companyDescription: "", email: "", password: "", role: ""}}
+                        initialValues={company || { companyName: "", companyDescription: "", email: "", password: "", role: "" }}
                         validationSchema={validationSchema}
                         onSubmit={(values) => handleUpdateCompany(values)}
                         enableReinitialize
                     >
-
-                        <Form>
-                            <div className="form-group mb-3">
-                                <label htmlFor="companyName">company Name:</label>
-                                <Field
-                                    type="text"
-                                    id="companyName"
-                                    value={company.companyName} onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="Enter your company Name here"
-                                />
-                                <ErrorMessage
-                                    name="companyName"
-                                    component="small"
-                                    className="text-danger"
-                                />
-                            </div>
-                            <div className="form-group mb-3">
-                                <label htmlFor="companyDescription">Company Description:</label>
-                                <Field
-
-                                    type="text"
-                                    id="companyDescription"
-                                    value={company.companyDescription} onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="Enter Description of company here"
-
-                                />
-                                <ErrorMessage
-                                    name="companyDescription"
-                                    component="small"
-                                    className="text-danger"
-                                />
-                            </div>
-                            <div className="form-group mb-3">
-                                <label htmlFor="email">Email:</label>
-                                <Field
-
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={company.email} onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="Enter your email here"
-                                />
-                                <ErrorMessage
-                                    name="email"
-                                    component="small"
-                                    className="text-danger"
-                                />
-                            </div>
-
-                            <div id="my-radio-group" className="d-grid gap-2">Role:</div>
-                            <div role="group" className="d-grid gap-2 " >
-                                <label>
+                        {({ resetForm }) => (
+                            <Form>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="companyName">company Name:</label>
                                     <Field
-                                        type="radio"
-                                        id="role"
-                                        name="role"
+                                        type="text"
+                                        id="companyName"
+                                        value={company.companyName}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        placeholder="Enter your company Name here"
                                     />
-                                    User
-                                </label>
-                                <label  >
-                                    <Field type="radio"
-                                        id="role"
-                                        name="role"
+                                    <ErrorMessage
+                                        name="companyName"
+                                        component="small"
+                                        className="text-danger"
                                     />
-                                    Admin
-                                </label>
-                            </div>
-                            <div className="d-grid gap-2">
-                                <button type="submit" value="update" className="btn btn-primary" to="/admin/UpdateCompany">
-                                    <i className='fa fa-save'></i> Update
-                                </button>
-                                <Link className="btn btn-link" to="/companys">
-                                    Back
-                                </Link>
-                            </div>
-                        </Form>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="companyDescription">Company Description:</label>
+                                    <Field
+
+                                        type="text"
+                                        id="companyDescription"
+                                        value={company.companyDescription} onChange={handleChange}
+                                        className="form-control"
+                                        placeholder="Enter Description of company here"
+
+                                    />
+                                    <ErrorMessage
+                                        name="companyDescription"
+                                        component="small"
+                                        className="text-danger"
+                                    />
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="email">Email:</label>
+                                    <Field
+
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={company.email} onChange={handleChange}
+                                        className="form-control"
+                                        placeholder="Enter your email here"
+                                    />
+                                    <ErrorMessage
+                                        name="email"
+                                        component="small"
+                                        className="text-danger"
+                                    />
+                                </div>
+
+                                <div id="my-radio-group" className="d-grid gap-2">Role:</div>
+                                <div role="group" className="d-grid gap-2 " >
+                                    <label>
+                                        <Field
+                                            type="radio"
+                                            id="role"
+                                            name="role"
+                                            value={company.role} onChange={handleChange}
+                                        />
+                                        User
+                                    </label>
+                                    <label  >
+                                        <Field type="radio"
+                                            id="role"
+                                            name="role"
+                                            value={company.role} onChange={handleChange}
+                                        />
+                                        Admin
+                                    </label>
+                                </div>
+                                <div className="d-grid gap-2">
+                                    <button type="submit" value="update" className="btn btn-primary">
+                                        <i className='fa fa-save'></i> Update
+                                    </button>
+                                    <Link className="btn btn-link" to="/admin/listCompanys">
+                                        Back
+                                    </Link>
+                                </div>
+                            </Form>
+                        )}
                     </Formik>
                 </div>
             </div>

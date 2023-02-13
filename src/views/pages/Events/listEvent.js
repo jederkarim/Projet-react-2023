@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -18,15 +17,10 @@ const ListEvent = () => {
     handleEventList();
   }, []);
 
-  const refreshList = () => {
-    handleEventList();
-  };
-
    const deleteOneEvent = async (e, id) => {
     try {
       await axios.delete(`http://localhost:4000/api/events/${id}`)
       handleEventList();
-      refreshList();
     }
     catch (error) {
         console.log(error)
@@ -73,7 +67,7 @@ const ListEvent = () => {
                       <td>{event.price}</td>
                       <td>{event.location}</td>
                       <td> 
-                        <button className='btn btn-danger me-1' onClick={(e) => { deleteOneEvent(e,event._id) }}>
+                        <button className='btn btn-danger me-1' onClick={(e) => { deleteOneEvent(e, event._id) }}>
                           <i className='fa fa-trash'></i> Delete</button>
                         <Link to={`/admin/UpdateEvent/${event._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
                       </td>
@@ -83,8 +77,7 @@ const ListEvent = () => {
                 )}
             </table>
           </div>
-  
-        </div>
+          </div>
   
       </div>
     )

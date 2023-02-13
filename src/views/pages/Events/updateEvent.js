@@ -38,9 +38,9 @@ function UpdateEvent() {
     });
 
     const handleUpdateEvent = async (event, id) => {
-        try {
+        try { 
             event.preventDefault()
-            await axios.put('http://localhost:4000/api/events' + params.idEvent, event)
+            await axios.put('http://localhost:4000/api/events/' + params.id, event)
             navigate("/admin/listEvent");
         } catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ function UpdateEvent() {
 
     useEffect(() => {
         const getEvent = async () => {
-            const EventfromServer = await axios.get('http://localhost:4000/api/events' + params.idEvent)
+            const EventfromServer = await axios.get('http://localhost:4000/api/events/' + params.id)
             setEvent(EventfromServer.data);
         };
         getEvent();
@@ -228,8 +228,8 @@ function UpdateEvent() {
                             </div>
 
                             <div className="d-grid gap-2">
-                                <button type="submit" className="btn btn-primary">
-                                    <i className='fa fa-save'></i> Add new event
+                            <button type="submit" value="update" className="btn btn-primary" to="/admin/UpdateEvent">
+                                    <i className='fa fa-save'></i> Update
                                 </button>
                                 <Link className="btn btn-link" to="/events">
                                     Back

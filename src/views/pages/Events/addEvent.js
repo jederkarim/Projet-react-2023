@@ -1,14 +1,32 @@
-import React, {useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from 'react-router-dom'
-// import AsyncSelect from 'react-select';
 import { useNavigate } from 'react-router-dom';
+import AsyncSelect from 'react-select';
 import axios from 'axios';
 
 
 function AddEvent() {
     var Navigate = useNavigate();
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState('');
+//   const [post, setPost] = useState({});
+
+//   useEffect(() => {
+//     axios.get('http://localhost:4000/api/events')
+//     .then(res=>{
+//               setLoading(false)
+//               setPost(res.data)
+//               setError('')
+//             }      
+//     )
+//     .catch(error =>{
+//       setLoading(false)
+//       setPost({})
+//       setError({error: error.message})
+//     })
+//   }, [])
 
     const validationSchema = Yup.object().shape({
         eventName: Yup.string()
@@ -28,7 +46,33 @@ function AddEvent() {
         location: Yup.string()
             .required("Location is required."),
     });
+    const initialValues = {
+        eventName: "",
+        eventDescription: "",
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
+        locationEvent: "",
+        price: "",
+        picture: ""
+    };
 
+    // const [Options, setOptions] = useState([])
+    // const handleChange = (selectedOption) => {
+    //     let selectedIDs = selectedOption.map(item => item.value);
+    //     setOptions(selectedIDs)
+
+    // }
+
+    const handleSubmit = async (values) => {
+        try {
+            await axios.post('http://localhost:4000/api/events', values)
+            Navigate("/admin/listEvent");
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const [setSelectedFile] = useState(null)
     const handelPicChange = (e) => {
@@ -37,26 +81,6 @@ function AddEvent() {
             setSelectedFile(selectedFile)
         }
     }
-    
-    const initialValues = {
-        eventName: "",
-        eventDescription: "",
-        startDate: "",
-        endDate: "",
-        startTime: "",
-        endTime: "",
-        price: "",
-        location: "",
-    };
-
-    const handleSubmit = async (values) => {
-        try {
-            await axios.post('http://localhost:4000/api/events', values)
-            Navigate("/events");
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     return (
         <div className="container">
@@ -74,7 +98,6 @@ function AddEvent() {
 
                                 <Field
                                     type="text"
-                                    id="eventName"
                                     name="eventName"
                                     className="form-control"
                                     placeholder="Enter your event name here"
@@ -90,7 +113,6 @@ function AddEvent() {
                                 <label htmlFor="eventDescription">Event discription:</label>
                                 <Field
                                     type="text"
-                                    id="eventDescription"
                                     name="eventDescription"
                                     className="form-control"
                                     placeholder="Enter your event description here"
@@ -125,7 +147,7 @@ function AddEvent() {
                                     className="form-control"
                                     placeholder="Enter your event end date here"
                                 />
-            
+
                                 <ErrorMessage
                                     name="endDate"
                                     component="small"
@@ -183,7 +205,6 @@ function AddEvent() {
                                 <label htmlFor="location">Location:</label>
                                 <Field
                                     type="text"
-                                    id="location"
                                     name="location"
                                     className="form-control"
                                     placeholder="Enter your event location here"
@@ -194,6 +215,17 @@ function AddEvent() {
                                     className="text-danger"
                                 />
                             </div>
+                            {/* <div className='my-4'>
+                                <label htmlFor="Tag" className="font-weight-bold">Tag</label>
+                                <Field as="select" name="Tag" id="Tag" >
+                                    {
+                                        loading ? 'loading' : post.map((item) =>
+                                            <option key={item.name} >{item.name}</option>
+                                        )
+                                    }
+                                    {error ? error : null}
+                                </Field>
+                            </div> */}
 
                             <div className="form-group mb-3">
                                 <label htmlFor="picture">Picture:</label>
@@ -213,7 +245,7 @@ function AddEvent() {
                                 <button type="submit" className="btn btn-primary">
                                     <i className='fa fa-save'></i> Add new event
                                 </button>
-                                <Link className="btn btn-link" to="/events">
+                                <Link className="btn btn-link" to="/admin/listEvent">
                                     Back
                                 </Link>
                             </div>

@@ -17,21 +17,16 @@ const ListCompany = () => {
     handleCompanyList();
   }, []);
 
-  const refreshList = () => {
-    handleCompanyList();
-  };
-
-   const deleteOneCompany = async (e, id) => {
+  const deleteOneCompany = async (id) => {
     try {
       await axios.delete(`http://localhost:4000/api/company/${id}`)
       handleCompanyList();
-      refreshList();
     }
     catch (error) {
-        console.log(error)
+      console.log(error)
     }
   };
-  
+
 
   return (
     <div className="row">
@@ -64,7 +59,7 @@ const ListCompany = () => {
                     <td>{company.companyDescription}</td>
                     <td>{company.email}</td>
                     <td>
-                       
+
                       <button className='btn btn-danger me-1' onClick={(e) => { deleteOneCompany(e, company._id) }}>
                         <i className='fa fa-trash'></i> Delete</button>
                       <Link to={`/admin/UpdateCompany/${company._id}`} className='btn btn-success'>
@@ -75,7 +70,7 @@ const ListCompany = () => {
               )
               )}
 
-
+ 
           </table>
         </div>
 

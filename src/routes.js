@@ -12,7 +12,6 @@ const AddEvent  = React.lazy(() => import('./views/pages/Events/addEvent'));
 const ListEvent  = React.lazy(() => import('./views/pages/Events/listEvent'));
 const UpdateEvent  = React.lazy(() => import('./views/pages/Events/updateEvent'));
 
-
 // tag component
 const AddTag  = React.lazy(() => import('./views/pages/tags/addTags'));
 const ListTag  = React.lazy(() => import('./views/pages/tags/listTags'));
@@ -30,18 +29,18 @@ const routes = [
   
   { path: '/addCompany', name: 'Companys', element: AddCompany },
   { path: '/listCompanys', name: 'Companys', element: ListCompany },
-  { path: '/UpdateCompany/:id', name: 'Company', element: UpdateCompany },
+  { path: '/UpdateCompany/:id', name: 'Companys', element: UpdateCompany },
 
 
-  { path: '/AddEvent', name: 'event', element: AddEvent },
+  { path: '/addEvent', name: 'event', element: AddEvent },
   { path: '/listEvent', name: 'event', element: ListEvent },
-  { path: '/UpdateEvent', name: 'event', element: UpdateEvent },
+  { path: '/UpdateEvent/:id', name: 'event', element: UpdateEvent },
 
 
 
   { path: '/AddTags', name: 'Tag', element: AddTag },
   { path: '/listTag', name: 'Tag', element: ListTag },
-  { path: '/listTag/:id', name: 'Tag', element: UpdateTag },
+  { path: '/UpdateTag/:id', name: 'Tag', element: UpdateTag },
 
  
 ]

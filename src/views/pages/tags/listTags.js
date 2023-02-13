@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -66,7 +65,7 @@ const ListTag = () => {
                                         <td>
                                             <button className='btn btn-danger me-1' onClick={(e) => { deleteOneTag(e, tag._id) }}>
                                                 <i className='fa fa-trash'></i> Delete</button>
-                                            <Link to={`/admin/tag/update/${tag._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
+                                            <Link to={`/admin/UpdateTag/${tag._id}`} className='btn btn-success'><i className='fa fa-edit'></i> Update</Link>
                                         </td>
                                     </tr>
                                 </tbody>

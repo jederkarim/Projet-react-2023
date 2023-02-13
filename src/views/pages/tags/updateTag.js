@@ -7,7 +7,6 @@ import axios from 'axios';
 
 
 function UpdateTag() {
-
     const params = useParams()
     let navigate = useNavigate();
     const [tag, setTag] = useState({
@@ -25,11 +24,10 @@ function UpdateTag() {
             .required("Description is required. "),
     });
 
-    const handleUpdateTag = async (event, id) => {
-        try {
-            event.preventDefault()
-            await axios.put('http://localhost:4000/api/tags' + params.idTag, tag)
-            navigate("/listtag");
+    const handleUpdateTag = async (event) => {
+        try { 
+            await axios.put('http://localhost:4000/api/tags/' + params.id, tag)
+            navigate("/admin/listtag");
         } catch (error) {
             console.log(error);
 
@@ -43,14 +41,14 @@ function UpdateTag() {
 
     useEffect(() => {
         const getTag = async () => {
-            const TagfromServer = await axios.get('http://localhost:4000/api/tags' + params.idTag)
-            setTag(TagfromServer.data);
+            const tagfromServer = await axios.get('http://localhost:4000/api/tags/' + params.id)
+            setTag(tagfromServer.data);
         };
         getTag();
     }, [params]);
 
 
-
+ 
 
     return (
         <div className="container">
@@ -58,8 +56,10 @@ function UpdateTag() {
                 <div className="col-md-6 offset-md-3 pt-3">
                     <h1 className="text-center">Add new Tag</h1>
                     <Formik
+                    initialValues= {tag || {name: "",description: ""}}
                         validationSchema={validationSchema}
-                        onSubmit={handleUpdateTag}
+                        onSubmit={(values) => handleUpdateTag(values)}
+                        enableReinitialize
                     >
                         {({ resetForm }) => (
                             <Form>
@@ -98,12 +98,11 @@ function UpdateTag() {
                                     />
                                 </div>
 
-
                                 <div className="d-grid gap-2">
-                                    <button type="submit" className="btn btn-primary">
-                                        <i className='fa fa-save'></i> Add new tag
-                                    </button>
-                                    <Link className="btn btn-link" to="/tags">
+                                <button type="submit" value="update" className="btn btn-primary">
+                                    <i className='fa fa-save'></i> Update
+                                </button>
+                                    <Link className="btn btn-link" to="/admin/listTags">
                                         Back
                                     </Link>
                                 </div>
